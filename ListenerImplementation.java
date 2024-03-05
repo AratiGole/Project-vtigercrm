@@ -1,57 +1,98 @@
-package commonUtils;
+package vtigercrm;
 
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.Reporter;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
+
+import commonUtils.JavaUtil;
 
 public class ListenerImplementation implements ITestListener{
-
-	@Override
+	ExtentReports reports;
+	
 	public void onTestStart(ITestResult result) {
-		// TODO Auto-generated method stub
-		ITestListener.super.onTestStart(result);
-	}
-
-	@Override
+		//System.out.println("Testscript execution is started");
+//		Reporter.log("Testscript executin is started");
+	String methodName=result.getMethod().getMethodName();
+	Reporter.log(methodName+"Testscript execution is stareted",true);
+	
+		
+		
+		
+		}
+	
 	public void onTestSuccess(ITestResult result) {
-		// TODO Auto-generated method stub
-		ITestListener.super.onTestSuccess(result);
+		//System.out.println("Testscript execution is Passed");
+	    String methodName=result.getMethod().getMethodName();
+	    
+	    // Add massage in report
+	  //  Reporter.log(methodName+"Testscript execution is Passed",true);
+		
+	    
 	}
-
-	@Override
-	public void onTestFailure(ITestResult result) {
-		// TODO Auto-generated method stub
-		ITestListener.super.onTestFailure(result);
+	public void onTestFailure(ITestResult  result) {
+		//System.out.println("Testscript execution is failed");
+		String message=result.getThrowable().toString();
+		String methodName= result.getMethod().getMethodName();
+		// Add massage in report
+		Reporter.log(methodName+"Testscript execution is failed"+message, true);
+		
+		
+		
+		
+		
 	}
-
-	@Override
-	public void onTestSkipped(ITestResult result) {
-		// TODO Auto-generated method stub
-		ITestListener.super.onTestSkipped(result);
+	
+	public void onTestSkipped(ITestResult  result) {
+		//System.out.println("Testscript execution is skipped");
+		String methodName= result.getMethod().getMethodName();
+		Reporter.log(methodName+"Testscript execution is skipped", true);
+		
 	}
-
-	@Override
-	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-		// TODO Auto-generated method stub
-		ITestListener.super.onTestFailedButWithinSuccessPercentage(result);
+	
+	public void  onTestFailedButWithSuccessPercentage(ITestResult result) {
+		
 	}
-
-	@Override
+	
 	public void onTestFailedWithTimeout(ITestResult result) {
-		// TODO Auto-generated method stub
-		ITestListener.super.onTestFailedWithTimeout(result);
+		
 	}
-
-	@Override
-	public void onStart(ITestContext context) {
-		// TODO Auto-generated method stub
-		ITestListener.super.onStart(context);
+	public void onstart(ITestContext context) {
+		//System.out.println("To start the execution ");
+		//Reporter.log("To start the execution ",true);
+		
+		//*****use of ExtentSparkerReports class just to configure Extent report
+		
+				// call getRandomNumber() from class JavaUtils  class from package commonUtils
+				
+				JavaUtil jUtil= new JavaUtil();
+				ExtentSparkReporter reporter = new ExtentSparkReporter("./extentreport/report"+jUtil.getRandomNumber()+".html");
+				reporter.config().setDocumentTitle("vtigercrm");
+				reporter.config().setTheme(Theme.STANDARD);
+				reporter.config().setReportName("OrganizationTest");
+				
+				
+				// use ExtentReports to generate extentreport 
+				reports=new  ExtentReports();
+				
+				// use to add extra information like os, broweser version , browser name, Author name etc.
+				reports.setSystemInfo("OS", "window");
+				reports.setSystemInfo("Browser", "Chrome");
+				reports.setSystemInfo("ChromeVersion", "12");
+				reports.setSystemInfo("Author", "Arati");
+				
+				
+		
 	}
-
-	@Override
-	public void onFinish(ITestContext context) {
-		// TODO Auto-generated method stub
-		ITestListener.super.onFinish(context);
+	
+	public void onFinish(ITestContext  context) {
+		//System.out.println("To finish the execution");
+		//Reporter.log("To finish the execution,true");
+		reports.flush();
 	}
 
 }
